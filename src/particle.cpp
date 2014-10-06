@@ -58,10 +58,19 @@ void Particle::update()
 void Particle::applyForces()
 {
     if (!gravity){
-    ofVec2f anti_gravity = ofVec2f(0.0, -2.45);
+    ofVec2f anti_gravity = ofVec2f(0.0, -2.0);
     velocity += anti_gravity;
 }
 else{ofVec2f gravity = ofVec2f(0.0, 2.45);
     velocity += gravity;}
+}
+void Particle::applyForces(ofVec2f force ){
+velocity += force;
+}
+
+void Particle::explode(){
+
+//will put stuff here
+
 }
 

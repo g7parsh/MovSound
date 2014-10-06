@@ -18,7 +18,7 @@ ofPoint center = ofPoint(ofGetWidth()/2,ofGetHeight()/2);
 	nBandsToGet = 128;
 
 	for(int i = 0; i < nBandsToGet; i++){
-        wave.addVertex(ofVec2f(5*i+ ofGetWidth()/2-(5*nBandsToGet/2),ofGetHeight()/2));
+        wave.addVertex(ofVec2f(3*i+ ofGetWidth()/2-(4*nBandsToGet/2),ofGetHeight()/2));
 
 
 	}
@@ -30,14 +30,16 @@ ofPoint center = ofPoint(ofGetWidth()/2,ofGetHeight()/2);
 //--------------------------------------------------------------
 void ofApp::update(){
 	ofSoundUpdate();
-    angle += fftSmoothed[6];
+    angle += fftSmoothed[13];
     threshhold+= angle;
 
-    if (fftSmoothed[4]*75 > 5){
+    if (fftSmoothed[13]*75 > 5 and timer < 0 ){
+            for(int i = 0 ; i < ofRandom(5,20); i ++){
         fireworks.push_back(Particle(ofPoint(ofRandom(0,ofGetWidth()),ofRandom(ofGetHeight()-200, ofGetHeight())),
                                      ofVec2f(0,0),
                                      ofColor(ofRandom(255),ofRandom(255),ofRandom(255))));
-        timer = 500;
+            }
+        timer = 60;
 
     }
 
@@ -60,6 +62,7 @@ void ofApp::update(){
 		if (fftSmoothed[i] < val[i]) fftSmoothed[i] = val[i];
 
 	}
+	timer --;
 
 }
 
@@ -74,13 +77,14 @@ void ofApp::draw(){
 ofSetColor(ofColor::black);
 float width = (float)(5*128) / nBandsToGet;
 	vector<ofPoint> myPoints = wave.getVertices();
-	for(int i = 0; i < myPoints.size();i++){
+	for(int i = 0; i < myPoints.size()+1;i++){
         ofPoint temp = myPoints[i];
-        temp.y += sin(temp.y + angle*.3)*50;
-        temp.x += cos(temp.x + angle*.3)*50;
+        temp.y += sin(temp.y + angle*.5)*100;
+        temp.x += cos(temp.x + angle*.5)*100;
 
         ofSetColor(fftSmoothed[3]*255,fftSmoothed[7]*100,fftSmoothed[1]*255);
-        ofCircle(temp,((fftSmoothed[4]*100 > 2) ? fftSmoothed[4]*100 : 2));
+        ofCircle(ofPoint(temp.x +i*2,temp.y) ,((fftSmoothed[6]*100 > 2) ? fftSmoothed[6]*100 : 2));
+
 	}
 
 	wave.close();

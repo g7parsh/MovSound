@@ -20,6 +20,7 @@ public:
     void drawR(float r);
     void update();
     void applyForces();
+    void applyForces(ofVec2f force);
 
     ofVec2f position, velocity;
     ofColor color;
@@ -27,6 +28,7 @@ public:
     bool    destroy;
     bool gravity;
 
+    void explode();
 };
 
 
