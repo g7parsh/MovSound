@@ -18,7 +18,7 @@ ofPoint center = ofPoint(ofGetWidth()/2,ofGetHeight()/2);
 	nBandsToGet = 128;
 
 	for(int i = 0; i < nBandsToGet; i++){
-        wave.addVertex(ofVec2f(3*i+ ofGetWidth()/2-(4*nBandsToGet/2),ofGetHeight()/2));
+        wave.addVertex(3*i+ ofGetWidth()/2-(4*nBandsToGet/2),ofGetHeight()/2);
 
 
 	}
@@ -75,24 +75,37 @@ void ofApp::draw(){
     }
 
 ofSetColor(ofColor::black);
-float width = (float)(5*128) / nBandsToGet;
+float width = (float)(ofGetWidth()) / nBandsToGet;
+
 	vector<ofPoint> myPoints = wave.getVertices();
-	for(int i = 0; i < myPoints.size()+1;i++){
+	ofPushMatrix();
+
+	for(int i = 0; i < myPoints.size();i++){
+
+
+
         ofPoint temp = myPoints[i];
+        int radius = atan2(abs(temp.x - ofGetWidth()/2),abs(temp.y - ofGetHeight()/2));
+        //temp.x =(ofGetWidth()/2) + radius*cos(angle);
+
+        //temp.y =(ofGetHeight()/2) + radius*sin(angle);
         temp.y += sin(temp.y + angle*.5)*100;
         temp.x += cos(temp.x + angle*.5)*100;
+        //temp.z *= fftSmoothed[10];
+
 
         ofSetColor(fftSmoothed[3]*255,fftSmoothed[7]*100,fftSmoothed[1]*255);
-        ofCircle(ofPoint(temp.x +i*2,temp.y) ,((fftSmoothed[6]*100 > 2) ? fftSmoothed[6]*100 : 2));
+        ofCircle(temp ,((fftSmoothed[6]*100 > 2) ? fftSmoothed[6]*100 : 2));
 
 	}
+	ofPopMatrix();
 
 	wave.close();
 	for (int i = 0;i < nBandsToGet; i++){
 		// (we use negative height here, because we want to flip them
 		// because the top corner is 0,0)
 
-		ofRect(100+i*width,ofGetHeight()-100,width,-(fftSmoothed[i] * 200));
+		ofRect(i*width,ofGetHeight(),width,-(fftSmoothed[i] * 200));
 
 
 	}
